@@ -67,6 +67,10 @@ class SpoonBOT {
 		return $this->request($id, "/users/%/report/");
 	}
 
+	public function impression($id, $impress_id) {
+		return $this->request($id, "/users/%/impression/", array("new_impression_ids" => 11));
+	}
+
 	public function join($id) {
 		return $this->request($id, "/lives/%/join/");
 	}
