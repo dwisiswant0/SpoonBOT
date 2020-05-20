@@ -19,6 +19,10 @@ class SpoonBOT {
 		curl_setopt($ch, CURLOPT_URL, $endpoint);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_POST, 1);
+		if ($data !== null) {
+			$data = json_encode($data);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		}
 		$headers = array();
 		$headers[] = "Host: {$this->api}";
 		$headers[] = "Connection: close";
@@ -36,7 +40,6 @@ class SpoonBOT {
 		$headers[] = "Accept-Language: id,en-US;q=0.9,en;q=0.8";
 		$headers[] = "Content-Type: application/json";
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-		if ($data !== null) curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 		$result = curl_exec($ch);
 		if (curl_errno($ch)) {
 			exit("Error:" . curl_error($ch));
