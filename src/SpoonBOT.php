@@ -13,7 +13,7 @@ class SpoonBOT {
 		return (json_last_error() == JSON_ERROR_NONE);
 	}
 
-	private function request($id, $endpoint) {
+	private function request($id = null, $endpoint, $data = null) {
 		$endpoint = preg_replace("/%/", $id, "https://" . $this->api . $endpoint);
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $endpoint);
@@ -22,7 +22,7 @@ class SpoonBOT {
 		$headers = array();
 		$headers[] = "Host: {$this->api}";
 		$headers[] = "Connection: close";
-		$headers[] = "Content-Length: 0";
+		$headers[] = "Content-Length: " . strlen($data);
 		$headers[] = "Pragma: no-cache";
 		$headers[] = "Cache-Control: no-cache";
 		$headers[] = "Accept: application/json";
@@ -34,7 +34,9 @@ class SpoonBOT {
 		$headers[] = "Sec-Fetch-Mode: cors";
 		$headers[] = "Referer: https://www.{$this->host}/";
 		$headers[] = "Accept-Language: id,en-US;q=0.9,en;q=0.8";
+		$headers[] = "Content-Type: application/json";
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		if ($data !== null) curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 		$result = curl_exec($ch);
 		if (curl_errno($ch)) {
 			exit("Error:" . curl_error($ch));
